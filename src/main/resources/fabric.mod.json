@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "corzfps",
+  "version": "${version}",
+  "name": "Corz FPS Client",
+  "description": "Client-side graphics presets, FPS HUD, and Right Shift menu.",
+  "authors": ["Corz FPS Community Project"],
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "client": ["dev.corz.fps.CorzFpsClient"]
+  },
+  "depends": {
+    "fabricloader": ">=0.19.5",
+    "minecraft": "=26.1.2",
+    "java": ">=25",
+    "fabric-api": "*"
+  }
+}
