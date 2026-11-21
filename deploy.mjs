@@ -15,4 +15,5 @@ const __uniServer=files['server.js']||'';
 const __uniHtml=files['public/index.html']||'';
 console.log('[C.C. probe] '+JSON.stringify({serverLength:__uniServer.length,ownerSession:__uniServer.includes('ownerSession'),isSameOrigin:__uniServer.includes('isSameOrigin'),routeCode:__uniServer.slice(-2000),welcome:__uniHtml.includes('id="welcome"'),freeButton:__uniHtml.includes('data-provider="free"'),ownerPanel:__uniHtml.includes('id="owner-panel"'),frontendStart:(files['public/app.js']||'').slice(0,700)}));
 await import('./cosmos-theme.mjs');
+await import('./cc-model-upgrade.mjs');
 await import('./server.js');
