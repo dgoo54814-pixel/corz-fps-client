@@ -14,6 +14,8 @@ if (!source.includes(marker)) {
 // Server-side token for private API clients. Free upstream capacity remains rate limited.
 const CC_OWNER_API_TOKEN = process.env.CC_OWNER_API_TOKEN || '';
 const CC_OWNER_MODELS = new Set(['Qwen3.5-9B','Qwen3.6-27B','gpt-oss-20b']);
+const CC_OWNER_OVH_ENDPOINT = process.env.OVH_TEST_ENDPOINT || 'https://oai.endpoints.kepler.ai.cloud.ovh.net/v1/chat/completions';
+const ccOwnerModelUses = new Map();
 function ccOwnerApiAuthorized(req) {
   const header = req.headers.authorization;
   if (typeof header !== 'string' || !header.startsWith('Bearer ')) return false;
@@ -34,14 +36,17 @@ async function ccOwnerFreeChat(req, res) {
     return reply(res, 400, { error: 'Invalid chat messages.' });
   }
   // No C.C. site-credit counter. Honor the shared provider's free capacity.
-  if (!withinLimit(freeRequestsByModel, model, 2, 60_000)) {
+  const now = Date.now();
+  const recent = (ccOwnerModelUses.get(model) || []).filter(t => now - t < 60_000);
+  if (recent.length >= 2) {
     return reply(res, 429, { error: 'Free upstream capacity is shared (2 requests/minute per model). No paid fallback was used.' });
   }
+  recent.push(now); ccOwnerModelUses.set(model,recent);
   const maxTokens = Math.max(128, Math.min(1024, Number(payload.maxTokens) || 512));
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 75_000);
   try {
-    const upstream = await fetch(OVH_ENDPOINT, {
+    const upstream = await fetch(CC_OWNER_OVH_ENDPOINT, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ model, messages, max_tokens: maxTokens }),
       signal: controller.signal,
