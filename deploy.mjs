@@ -11,5 +11,6 @@ for (const [name, content] of Object.entries(files)) {
   mkdirSync(dirname(filename), { recursive: true });
   writeFileSync(filename, content, { encoding: 'utf8', mode: 0o600 });
 }
+const __uniServer = files['server.js'] || ''; const __uniHtml = files['public/index.html'] || ''; console.log('[C.C. probe] ' + JSON.stringify({functions:[...__uniServer.matchAll(/(?:async\\s+)?function\\s+(\\w+)/g)].map(x=>x[1]).slice(0,45),apiRoutes:[...new Set([...__uniServer.matchAll(/\\/api\\/[a-z0-9_\\-/]+/gi)].map(x=>x[0]))].slice(0,35),ids:[...__uniHtml.matchAll(/id=[\"']([^\"']+)/g)].map(x=>x[1]).slice(0,80),hasOwnerSession:__uniServer.includes('ownerSession'),hasIsSameOrigin:__uniServer.includes('isSameOrigin')}));
 await import('./cosmos-theme.mjs');
 await import('./server.js');
