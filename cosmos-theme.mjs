@@ -188,4 +188,6 @@ let existingHtml=readFileSync(htmlPath,'utf8');
 if(!existingCss.includes(styleTag))writeFileSync(cssPath,existingCss+'\n'+css,'utf8');
 if(!existingJs.includes(scriptTag))writeFileSync(jsPath,existingJs+'\n'+js,'utf8');
 // No HTML transformation needed: the injected client code preserves original controls and IDs.
+const baselineServer = readFileSync(join(process.cwd(), 'server.js'), 'utf8');
+console.log('[C.C. Universe] Detected capabilities: ' + JSON.stringify({welcome:/id=[\"']welcome[\"']/.test(existingHtml),sidebar:/id=[\"']sidebar[\"']/.test(existingHtml),owner:/id=[\"']owner-panel[\"']/.test(existingHtml),freeButton:/data-provider=[\"']free[\"']/.test(existingHtml),freeBackend:baselineServer.includes('OVH_ENDPOINT') || baselineServer.includes('FREE_MODELS')}));
 console.log('[C.C. Universe] Visual theme installed; original APIs, owner controls and chat engine preserved.');
