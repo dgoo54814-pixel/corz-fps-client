@@ -11,6 +11,8 @@ for (const [name, content] of Object.entries(files)) {
   mkdirSync(dirname(filename), { recursive: true });
   writeFileSync(filename, content, { encoding: 'utf8', mode: 0o600 });
 }
-const __uniServer = files['server.js'] || ''; const __uniHtml = files['public/index.html'] || ''; console.log('[C.C. probe] ' + JSON.stringify({functions:[...__uniServer.matchAll(/(?:async\\s+)?function\\s+(\\w+)/g)].map(x=>x[1]).slice(0,45),apiRoutes:[...new Set([...__uniServer.matchAll(/\\/api\\/[a-z0-9_\\-/]+/gi)].map(x=>x[0]))].slice(0,35),ids:[...__uniHtml.matchAll(/id=[\"']([^\"']+)/g)].map(x=>x[1]).slice(0,80),hasOwnerSession:__uniServer.includes('ownerSession'),hasIsSameOrigin:__uniServer.includes('isSameOrigin')}));
+const __uniServer=files['server.js']||'';
+const __uniHtml=files['public/index.html']||'';
+console.log('[C.C. probe] '+JSON.stringify({serverLength:__uniServer.length,ownerSession:__uniServer.includes('ownerSession'),isSameOrigin:__uniServer.includes('isSameOrigin'),routeCode:__uniServer.slice(-2000),welcome:__uniHtml.includes('id="welcome"'),freeButton:__uniHtml.includes('data-provider="free"'),ownerPanel:__uniHtml.includes('id="owner-panel"'),frontendStart:(files['public/app.js']||'').slice(0,700)}));
 await import('./cosmos-theme.mjs');
 await import('./server.js');
