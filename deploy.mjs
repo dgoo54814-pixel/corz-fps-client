@@ -11,4 +11,5 @@ for (const [name, content] of Object.entries(files)) {
   mkdirSync(dirname(filename), { recursive: true });
   writeFileSync(filename, content, { encoding: 'utf8', mode: 0o600 });
 }
+await import('./cosmos-theme.mjs');
 await import('./server.js');
